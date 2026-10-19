@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#070812">
+<title>EditX AI — Beat Sync Video Editor</title>
+<style>
+:root{--bg:#070812;--panel:#101221;--line:#282d50;--muted:#a3a9cc;--text:#f7f8ff;--blue:#2877ff;--pink:#c322d8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{width:min(760px,100%);margin:auto;padding:22px 16px 42px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:8px 0 24px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:3px;font-size:21px}
+.logo{width:44px;height:44px;display:grid;place-items:center;border:1px solid #345cff;border-radius:12px;color:#72c7ff;font-weight:1000;font-size:24px;text-shadow:0 0 12px #7b35ff}
+.badge{font-size:12px;border:1px solid #7d42ff;border-radius:20px;padding:7px 11px;color:#d8ccff}
+h1{font-size:27px;line-height:1.15;margin:0 0 8px}p{color:var(--muted);margin:0 0 18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:17px;margin:14px 0}
+label{display:block;font-size:14px;color:#c5c9e7;margin:0 0 8px;font-weight:700}
+input[type=file],select{width:100%;background:#090b17;color:var(--text);border:1px solid #34395f;border-radius:12px;padding:13px;font:inherit}
+input[type=file]{font-size:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.durations{display:flex;gap:8px}
+.durations label{flex:1;margin:0}
+.durations input{position:absolute;opacity:0}
+.durations span{display:block;text-align:center;padding:12px 6px;border:1px solid #34395f;border-radius:12px;background:#090b17;color:#d8dcff}
+.durations input:checked+span{border-color:#8750ff;background:#24153b;box-shadow:inset 0 0 0 1px #8750ff}
+button{width:100%;border:0;border-radius:14px;padding:15px 16px;color:white;font-size:16px;font-weight:850;letter-spacing:.6px;background:linear-gradient(100deg,#2568f4,#bd20d6);cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.secondary{background:#191d32;border:1px solid #34395f;font-size:14px;padding:11px}
+.preview{width:100%;aspect-ratio:16/9;background:#03040a;border:1px solid #34395f;border-radius:14px;overflow:hidden;display:grid;place-items:center;color:#8d94b8;text-align:center}
+.preview video{width:100%;height:100%;object-fit:contain}
+.progress{height:8px;background:#20243c;border-radius:9px;overflow:hidden;margin:10px 0}
+.progress div{height:100%;width:0;background:linear-gradient(90deg,#2877ff,#d02cdb);transition:width .15s}
+.small{font-size:12px;color:#8f96bb}.status{min-height:22px;color:#d4c8ff;font-size:14px;margin-top:10px}
+.checks{display:flex;flex-wrap:wrap;gap:10px 14px}.checks label{display:flex;align-items:center;gap:7px;margin:0;font-weight:500}
+.checks input{accent-color:#9d4dff;width:17px;height:17px}
+a{color:#9bbcff}.footer{font-size:12px;color:#777f9f;text-align:center;margin-top:22px}
+@media(max-width:480px){.row{grid-template-columns:1fr}.brand{font-size:17px;letter-spacing:2px}h1{font-size:24px}}
+</style>
+</head>
+<body>
+<main>
+<header><div class="brand"><div class="logo">E</div><span>EDITX AI</span></div><div class="badge">BEAT SYNC · BETA</div></header>
+<h1>Videongni ritmga moslab edit qil</h1>
+<p>Video va musiqani tanla. EditX musiqa boshidan beatlarni topib, videoning haqiqiy qismlarini kesadi, effekt va stikerlar qo‘shadi.</p>
+
+<section class="card">
+  <label for="videoFile">1. Video fayli</label>
+  <input id="videoFile" type="file" accept="video/*">
+  <div class="small" style="margin-top:7px">MP4 yoki WebM tavsiya qilinadi. Video rasmlarga aylantirilmaydi — klipning o‘zi ishlatiladi.</div>
+  <div style="height:15px"></div>
+  <label for="musicFile">2. Musiqa fayli</label>
+  <input id="musicFile" type="file" accept="audio/*,video/mp4">
+  <div class="small" style="margin-top:7px">MP3, WAV, M4A yoki boshqa brauzer qo‘llaydigan audio.</div>
+</section>
+
+<section class="card">
+  <label>3. Edit davomiyligi</label>
+  <div class="durations">
+    <label><input type="radio" name="duration" value="15" checked><span>15 sekund</span></label>
+    <label><input type="radio" name="duration" value="30"><span>30 sekund</span></label>
+    <label><input type="radio" name="duration" value="45"><span>45 sekund</span></label>
+  </div>
+  <div style="height:16px"></div>
+  <label for="style">Edit uslubi</label>
+  <select id="style">
+    <option value="phonk">Phonk / Fast cuts</option>
+    <option value="cinematic">Cinematic</option>
+    <option value="glitch">Glitch / Flash</option>
+  </select>
+  <div style="height:16px"></div>
+  <label>Effektlar va stikerlar</label>
+  <div class="checks">
+    <label><input type="checkbox" id="shake" checked> Beat shake</label>
+    <label><input type="checkbox" id="flash" checked> Flash o‘tish</label>
+    <label><input type="checkbox" id="zoom" checked> Zoom</label>
+    <label><input type="checkbox" id="stickers" checked> ✨🔥 stikerlar</label>
+  </div>
+</section>
+
+<section class="card">
+  <label>4. Video preview</label>
+  <div class="preview" id="preview"><span>Video tanlang — preview shu yerda chiqadi</span></div>
+  <div class="row" style="margin-top:12px">
+    <button class="secondary" id="previewBtn" disabled>▶ Preview</button>
+    <button class="secondary" id="stopPreview" disabled>■ To‘xtatish</button>
+  </div>
+</section>
+
+<button id="makeBtn" disabled>✨ AI BEAT EDIT YARATISH</button>
+<div class="progress"><div id="bar"></div></div>
+<div class="status" id="status" role="status" aria-live="polite">Avval video va musiqani tanlang.</div>
+<a id="download" hidden download="editx-ai-edit.webm">Tayyor videoni yuklab olish</a>
+<div class="small" style="margin-top:10px">Eslatma: bu brauzerda ishlaydigan beta versiya. Eksport WebM formatida. Katta videolarni qayta ishlash uchun telefoningizda yetarli bo‘sh xotira bo‘lsin.</div>
+<div class="footer">EDITX AI · Local processing · Videolar serverga yuborilmaydi</div>
+</main>
+
+<video id="sourceVideo" playsinline muted style="position:absolute;width:1px;height:1px;opacity:.001;pointer-events:none"></video>
+<audio id="sourceAudio" crossorigin="anonymous" style="display:none"></audio>
+<canvas id="renderCanvas" width="1280" height="720" style="display:none"></canvas>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const videoInput=$('videoFile'), musicInput=$('musicFile'), video=$('sourceVideo'), audio=$('sourceAudio');
+const canvas=$('renderCanvas'), ctx=canvas.getContext('2d');
+const makeBtn=$('makeBtn'), previewBtn=$('previewBtn'), stopBtn=$('stopPreview');
+let videoURL=null,audioURL=null,rendering=false,previewing=false,raf=0,beatTimes=[],audioCtx=null;
+let lastOutputURL=null;
+
+function duration(){return Number(document.querySelector('input[name="duration"]:checked').value)}
+function say(s){$('status').textContent=s}
+function setProgress(n){$('bar').style.width=Math.max(0,Math.min(100,n))+'%'}
+function ready(){makeBtn.disabled=!(videoInput.files[0]&&musicInput.files[0])}
+videoInput.addEventListener('change',()=>{
+  if(videoURL)URL.revokeObjectURL(videoURL);
+  const f=videoInput.files[0]; if(!f)return;
+  videoURL=URL.createObjectURL(f);video.src=videoURL;video.load();
+  video.onloadedmetadata=()=>{ $('preview').innerHTML='';const pv=document.createElement('video');pv.src=videoURL;pv.controls=true;pv.playsInline=true;$('preview').appendChild(pv);previewBtn.disabled=false;ready();say(`Video yuklandi · ${video.videoWidth}×${video.videoHeight} · ${video.duration.toFixed(1)} s`);};
+});
+musicInput.addEventListener('change',()=>{
+  if(audioURL)URL.revokeObjectURL(audioURL);
+  const f=musicInput.files[0];if(!f)return;
+  audioURL=URL.createObjectURL(f);audio.src=audioURL;audio.load();
+  audio.onloadedmetadata=()=>{ready();say(`Musiqa yuklandi · ${audio.duration.toFixed(1)} s`);};
+});
+previewBtn.addEventListener('click',async()=>{
+  if(!videoURL)return;
+  const pv=$('preview').querySelector('video');if(pv){pv.currentTime=0;await pv.play();stopBtn.disabled=false;}
+});
+stopBtn.addEventListener('click',()=>{const pv=$('preview').querySelector('video');if(pv)pv.pause();stopBtn.disabled=true;});
+
+async function decodeMusic(){
+  if(!audioURL)throw new Error('Musiqa tanlanmagan.');
+  audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+  await audioCtx.resume();
+  const response=await fetch(audioURL), arrayBuffer=await response.arrayBuffer();
+  const buffer=await audioCtx.decodeAudioData(arrayBuffer.slice(0));
+  const ch=buffer.getChannelData(0), sr=buffer.sampleRate, step=Math.max(1,Math.floor(sr*.025));
+  const energy=[];
+  for(let i=0;i<ch.length;i+=step){
+    let sum=0;const end=Math.min(ch.length,i+step);
+    for(let j=i;j<end;j++)sum+=ch[j]*ch[j];
+    energy.push(Math.sqrt(sum/Math.max(1,end-i)));
+  }
+  const smoothed=energy.map((v,i)=>{let prev=0;for(let k=Math.max(0,i-4);k<i;k++)prev+=energy[k];return v-prev/Math.max(1,Math.min(4,i));});
+  let candidates=[];
+  for(let i=2;i<smoothed.length-2;i++){
+    if(smoothed[i]>.012&&smoothed[i]>=smoothed[i-1]&&smoothed[i]>smoothed[i+1]&&smoothed[i]>smoothed[i-2]&&smoothed[i]>=smoothed[i+2])candidates.push(i*.025);
+  }
+  // Keep the strongest practical beat-like transients, spaced to avoid overly rapid cuts.
+  const threshold=.11;let selected=[];
+  for(const t of candidates){
+    if(!selected.length||t-selected[selected.length-1]>=threshold)selected.push(t);
+  }
+  if(selected.length<4){
+    selected=[];for(let t=.45;t<Math.min(buffer.duration,180);t+=.5)selected.push(t);
+  }
+  return {buffer,beats:selected,duration:buffer.duration};
+}
+
+function drawFrame(t,cutIndex,style,opts,flashOn=false){
+  const W=canvas.width,H=canvas.height;
+  ctx.save();ctx.fillStyle='#03040a';ctx.fillRect(0,0,W,H);
+  if(video.readyState>=2){
+    const vw=video.videoWidth||16,vh=video.videoHeight||9,scale=Math.max(W/vw,H/vh);
+    let zoom=opts.zoom?1+0.025*Math.sin(t*5):1;
+    let shake=opts.shake?Math.sin(t*37)*5:0;
+    if(style==='cinematic')zoom=opts.zoom?1.025:1;
+    ctx.translate(W/2+shake,H/2);ctx.scale(zoom,zoom);
+    const dw=vw*scale,dh=vh*scale;
+    ctx.drawImage(video,-dw/2,-dh/2,dw,dh);
+    ctx.restore();
+  }else ctx.restore();
+  // style grading overlays
+  if(style==='cinematic'){ctx.fillStyle='rgba(4,9,25,.13)';ctx.fillRect(0,0,W,H);ctx.fillStyle='rgba(255,180,90,.05)';ctx.fillRect(0,0,W,H);}
+  if(style==='glitch'&&opts.flash&&flashOn){ctx.fillStyle='rgba(160,210,255,.45)';ctx.fillRect(0,0,W,H);}
+  if(opts.flash&&flashOn){ctx.fillStyle='rgba(255,255,255,.62)';ctx.fillRect(0,0,W,H);}
+  if(opts.stickers){
+    const emojis=['✨','⚡','🔥','💜','✦'];const e=emojis[cutIndex%emojis.length];
+    ctx.save();ctx.font='bold 54px system-ui';ctx.textAlign='right';ctx.shadowColor='#8d35ff';ctx.shadowBlur=18;
+    ctx.fillText(e,W-54,90+(cutIndex%2)*22);ctx.restore();
+  }
+  if(style==='glitch'&&Math.floor(t*12)%5===0){ctx.fillStyle='rgba(0,190,255,.14)';ctx.fillRect(0,Math.random()*H,W,5);}
+}
+
+function getCuts(beats,total,videoDuration){
+  const cuts=[0];let minGap=0.28;
+  for(const b of beats){if(b>0.18&&b<total-.15&&b-cuts[cuts.length-1]>=minGap)cuts.push(b);}
+  cuts.push(total);
+  // If beat detection gives too many or too few, keep an energetic but watchable pace.
+  const maxCuts=Math.ceil(total/.38);
+  if(cuts.length>maxCuts+1){const filtered=[0];for(let i=1;i<cuts.length-1;i++){if(cuts[i]-filtered[filtered.length-1]>=.38)filtered.push(cuts[i]);}filtered.push(total);return filtered;}
+  return cuts;
+}
+function pickStart(index,videoDuration,clipLen){
+  const max=Math.max(0,videoDuration-clipLen);
+  if(max<.05)return 0;
+  // Different video portions are used; never converts the video to still images.
+  return (index*1.713+index*index*.137)%max;
+}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+async function seekVideo(t){
+  const target=Math.max(0,Math.min(t,Math.max(0,video.duration-.04)));
+  if(Math.abs(video.currentTime-target)<.035&&video.readyState>=2)return;
+  await new Promise((resolve,reject)=>{
+    const timeout=setTimeout(()=>{cleanup();resolve();},1800);
+    const done=()=>{cleanup();resolve()};
+    const cleanup=()=>{clearTimeout(timeout);video.removeEventListener('seeked',done);};
+    video.addEventListener('seeked',done,{once:true});
+    try{video.currentTime=target}catch(e){cleanup();resolve()}
+  });
+}
+async function makeEdit(){
+  if(rendering)return;
+  if(!videoURL||!audioURL)return;
+  if(!window.MediaRecorder||!canvas.captureStream){say('Brauzer video eksportini qo‘llamayapti. Chrome orqali oching.');return;}
+  rendering=true;makeBtn.disabled=true;previewBtn.disabled=true;$('download').hidden=true;setProgress(0);
+  let stream=null,recorder=null,rafId=0,blobParts=[];
+  try{
+    say('Musiqa tahlil qilinyapti…');
+    const music=await decodeMusic();
+    const total=Math.min(duration(),music.duration,Math.max(.1,video.duration));
+    if(total<1)throw new Error('Video yoki musiqa juda qisqa.');
+    beatTimes=music.beats.filter(t=>t<total);
+    const cuts=getCuts(beatTimes,total,video.duration);
+    const style=$('style').value;
+    const opts={shake:$('shake').checked,flash:$('flash').checked,zoom:$('zoom').checked,stickers:$('stickers').checked};
+    say(`Beatlar topildi · ${Math.max(0,cuts.length-2)} ta kesish. Video qismlari tayyorlanmoqda…`);
+    video.pause();video.muted=true;audio.pause();audio.currentTime=0;
+    const canvasStream=canvas.captureStream(30);
+    const dest=audioCtx.createMediaStreamDestination();
+    const source=audioCtx.createBufferSource();source.buffer=music.buffer;source.connect(dest);
+    dest.stream.getAudioTracks().forEach(t=>canvasStream.addTrack(t));
+    stream=canvasStream;
+    const mime=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(t=>MediaRecorder.isTypeSupported(t))||'';
+    recorder=new MediaRecorder(stream,mime?{mimeType:mime,videoBitsPerSecond:6500000}:undefined);
+    recorder.ondataavailable=e=>{if(e.data&&e.data.size)blobParts.push(e.data)};
+    const stopped=new Promise(resolve=>recorder.onstop=resolve);
+    recorder.start(500);
+    source.start(0,0,total);
+    const startTime=performance.now();
+    let lastCut=-1,frameCount=0;
+    const tick=async()=>{
+      if(!rendering)return;
+      const elapsed=(performance.now()-startTime)/1000;
+      if(elapsed>=total){rendering=false;return}
+      let idx=0;while(idx<cuts.length-1&&elapsed>=cuts[idx+1])idx++;
+      const local=elapsed-cuts[idx],segLen=cuts[idx+1]-cuts[idx];
+      if(idx!==lastCut){
+        lastCut=idx;
+        const srcStart=pickStart(idx,video.duration,Math.min(segLen,Math.max(.2,video.duration*.45)));
+        await seekVideo(srcStart);
+        try{await video.play()}catch(e){}
+      }
+      const beatWindow=cuts.slice(1,-1).some(c=>Math.abs(elapsed-c)<.075);
+      drawFrame(elapsed,idx,style,opts,beatWindow);
+      frameCount++;setProgress(elapsed/total*95);
+      rafId=requestAnimationFrame(()=>{tick().catch(e=>{rendering=false;say('Xatolik: '+e.message)})});
+    };
+    await tick();
+    while(rendering)await wait(100);
+    cancelAnimationFrame(rafId);
+    source.stop();
+    recorder.stop();await stopped;
+    stream.getTracks().forEach(t=>t.stop());
+    const blob=new Blob(blobParts,{type:recorder.mimeType||'video/webm'});
+    if(!blob.size)throw new Error('Video fayli bo‘sh chiqdi. Qaytadan urinib ko‘ring.');
+    if(lastOutputURL)URL.revokeObjectURL(lastOutputURL);
+    lastOutputURL=URL.createObjectURL(blob);
+    const link=$('download');link.href=lastOutputURL;link.hidden=false;link.textContent=`⬇ Tayyor editni yuklab olish (${(blob.size/1024/1024).toFixed(1)} MB)`;link.style.display='block';link.style.marginTop='15px';link.style.fontWeight='800';
+    setProgress(100);say(`Tayyor! ${Math.round(total)} sekundlik beat-sync edit yaratildi. Format: WebM.`);
+  }catch(err){
+    rendering=false;say('Xatolik: '+(err&&err.message?err.message:'Noma’lum muammo')+'. Chrome brauzerida qayta urinib ko‘ring.');
+  }finally{
+    if(stream)stream.getTracks().forEach(t=>{try{t.stop()}catch(e){}});
+    rendering=false;makeBtn.disabled=!(videoInput.files[0]&&musicInput.files[0]);previewBtn.disabled=!videoURL;
+  }
+}
+makeBtn.addEventListener('click',makeEdit);
+})();
+</script>
+</body>
+</html>
